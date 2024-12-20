@@ -1,60 +1,34 @@
-const express=require ("express");
-
+const express=require("express");
 const app=express();
+const path=require("path");
 
-let port=8080;
+let port =8080;
+app.set("views engine, ejs")
+app.set("views",path.join(__dirname, "/views"))
 
-app.listen(port, ()=>{
-    console.log(`App is listening on the port ${port}`);
-})
-
-// app.use((req,res)=>{
-//     console.log("Request accepted")
-//     res.send("This is an main page")
-// });
+app.listen(port,()=>{
+    console.log(`app is listening on ${port}`);
+});
 
 app.get("/",(req,res)=>{
-    res.send("Home page occurs here!!");
+    res.send("Hello everyone!!");
 });
 
-app.get("/Contact",(req,res)=>{
-    res.send("contact me here i'm avaiable");
+app.get("/register",(req,res)=>{
+    res.render("home.ejs");
 });
 
-
-// now we are using query by req.query
-// app.get("/details",(req,res)=>{
-//     console.log(req.query);
-//     console.log("Query is locked sucessfully see console for output")
-// });
-
-
-app.get("/details",(req,res)=>{
-    let {q}=req.query;
-    if(!q) {                      //this logic is for the thing when user did not enter it's query and still browse the details page
-        res.send("nothing searched")
-    }
-    res.send(`Query logged sucessfully see the webpage, output=${q}`);
+app.get("/rollDice",(req,res)=>{
+    let value= Math.floor(Math.random() * 6) + 1 ;
+    res.render("dice.ejs", {value});
 });
 
-
-// these are the parameters that we pass in the URL but using req.params
-
-app.get("/:username/:id/:city",(req,res)=>{
-    console.log(req.params);
-    res.send("Hello everyone");
+app.get("/Instagram/:username",(req,res)=>{
+    let {username}=req.params
+    res.render("Instagram.ejs",{username});
 });
-
 
 app.get("*",(req,res)=>{
-    res.send("Did not find anything here!!");
+    res.send("Error while loading the page");
 });
-
-
-// this is a post request
-app.post("/Search",(req,res)=>{
-    res.send("This is a post request");
-});
-
-
 
